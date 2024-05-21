@@ -1,3 +1,4 @@
+import pytz
 from app.src.models import db
 from app.src.constants.contants import Constants
 from datetime import datetime
@@ -24,6 +25,9 @@ class Job(db.Model):
             Returns a dictionary representation of the Job object.
     """
 
+    def utcnow(self):
+        return datetime.now(pytz.utc)
+
     job_id = db.Column(db.String(36), primary_key=True)
     job_name = db.Column(db.String(50), nullable=False)
     connector_type = db.Column(
@@ -32,8 +36,8 @@ class Job(db.Model):
     schedule = db.Column(db.Enum(*Constants.ALLOWED_SCHEDULES), nullable=False)
     connector_config = db.Column(db.JSON, nullable=False)
     job_status = db.Column(db.Enum(*Constants.ALLOWED_JOB_STATUS), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
-    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = db.Column(db.DateTime, default=utcnow)
+    updated_at = db.Column(db.DateTime, default=utcnow, onupdate=utcnow)
 
     def __init__(
         self,

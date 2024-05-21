@@ -198,6 +198,25 @@ Once the application is running, you can use the following endpoints to manage s
             "total_objects": 1506
         }
         ```
+
+## RUNNING IN DOCKER ENVIRONMENT
+- Build the docker image
+  ```
+  docker build -t data-sync-scheduler .
+  ```
+
+- Run the docker image by passing .env file
+  ```
+  docker run -d --name data-sync-container --env-file .env -p 5000:5000 data-sync-scheduler
+  ```
+
+After above steps the webserver should be ready to receive requests.
+- To start an interactive bash shell inside the container to view the downloaded objects. We can use below command
+  ```
+  docker exec -it data-sync-container /bin/bash
+  ```
+
+
     
 ## Next Steps
 - Add cron support

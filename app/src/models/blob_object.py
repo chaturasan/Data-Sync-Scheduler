@@ -1,3 +1,4 @@
+import pytz
 from app.src.models import db
 from datetime import datetime
 
@@ -21,6 +22,9 @@ class BlobObject(db.Model):
         __init__: Initializes a new instance of the BlobObject class.
     """
 
+    def utcnow(self):
+        return datetime.now(pytz.utc)
+
     id = db.Column(db.Integer, primary_key=True)
     object_key = db.Column(db.String(50), nullable=False)
     object_size = db.Column(db.String(50), nullable=False)
@@ -28,8 +32,8 @@ class BlobObject(db.Model):
     status = db.Column(db.String(50), nullable=False)
     local_full_path = db.Column(db.String(255), nullable=True)
     job_id = db.Column(db.Integer, db.ForeignKey("job.job_id"), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
-    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = db.Column(db.DateTime, default=utcnow)
+    updated_at = db.Column(db.DateTime, default=utcnow, onupdate=utcnow)
 
     def __init__(
         self, object_key, object_size, last_position, status, job_id, local_full_path
