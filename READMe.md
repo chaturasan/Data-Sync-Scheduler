@@ -1,6 +1,6 @@
 # Data Sync Scheduler
 
-This project is a Data Sync Scheduler application built using the Flask framework. It synchronizes data from different data connectors at specified intervals. Currently, the application supports data synchronization with Amazon S3. Data is fetched in chunks of a default size of 10 MB, which can be configured through the "S3_CHUNK_SIZE" environment variable. The synchronization progress is stored in a database, allowing the process to resume from the last successful checkpoint in case of any errors, thus enhancing fault tolerance. Additionally, the application implements retries with exponential backoff to handle multiple retry attempts in case of connector errors.
+This project is a Data Sync Scheduler application built using the Flask framework. It synchronizes data from different data connectors at specified intervals. Currently, the application supports data synchronization with Amazon S3. Data is fetched in chunks of a default size of 10 MB, which can be configured through the "S3_CHUNK_SIZE" environment variable. The synchronization progress is stored in a database (sqlite database), allowing the process to resume from the last successful checkpoint in case of any errors, thus enhancing fault tolerance. Additionally, the application implements retries with exponential backoff to handle multiple retry attempts in case of connector errors.
 
 ## Installation
 
@@ -11,6 +11,10 @@ This project is a Data Sync Scheduler application built using the Flask framewor
 2. Create virtual env
     ```
     python3 -m venv venv
+
+    Activate virtual env
+    venv/Scripts/activate for windows
+    source venv/bin/activate for Mac
     ```
 
 3. Install the required dependencies:
@@ -22,8 +26,8 @@ This project is a Data Sync Scheduler application built using the Flask framewor
     - create .env file in the root folder and add below variables
         ```
         DB_URL="sqlite:///sync_jobs.db" // SQlite db setup
-        JSON_ROOT_FOLDER = "./json"
-        DOWNLOAD_ROOT_FOLDER = "./download"
+        JSON_ROOT_FOLDER = "./json" // Every sync run generates a dump of json files containing chunk related information
+        DOWNLOAD_ROOT_FOLDER = "./download" // Stores the downloaded objects locally
         DB_ROWS_RETRIEVAL_LIMIT = 1000
         RETRY_COUNT = 3
         RETRY_DELAY = 1
@@ -130,7 +134,7 @@ Once the application is running, you can use the following endpoints to manage s
         - offset: parameter determines the starting point for fetching 
         - e.g:
             ```
-            http://127.0.0.1:5000/api/v1/jobs/9c747033-dc77-4f32-9f90-aa7cf665ad7f/objects?limit=5&offset=1
+            GET http://127.0.0.1:5000/api/v1/jobs/9c747033-dc77-4f32-9f90-aa7cf665ad7f/objects?limit=5&offset=1
             {
             "limit": 5,
             "objects": [
@@ -195,7 +199,10 @@ Once the application is running, you can use the following endpoints to manage s
         }
         ```
     
-
+## Next Steps
+- Add cron support
+- Ability to update the job
+- Ability to bulk delete the jobs
 ## Contributing
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
