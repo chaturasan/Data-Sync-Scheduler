@@ -1,4 +1,5 @@
 import logging
+import traceback
 from flask import Blueprint, Flask, jsonify, request
 from injector import inject
 from app.src.constants.contants import Constants
@@ -76,6 +77,7 @@ class SyncJobSchedulerController:
                 {"job_id": job_id, "message": "Job scheduled successfully"}
             ), 200
         except Exception as e:
+            logging.error(traceback.print_exc())
             logging.error(f"Error scheduling job: {e}")
             return jsonify(
                 {"message": "Internal Server Error, Unable to schedule the job"}

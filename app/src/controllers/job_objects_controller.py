@@ -36,6 +36,9 @@ class JobObjectsController:
             limit = request.args.get("limit", default=10, type=int)
             offset = request.args.get("offset", default=0, type=int)
 
+            if limit < 0 or offset < 0:
+                return jsonify({"error": "Invalid limit or offset"}), 400
+
             return jsonify(
                 self.__job_objects_service.get_objects(job_id, limit, offset)
             ), 200

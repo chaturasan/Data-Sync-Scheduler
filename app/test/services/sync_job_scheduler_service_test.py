@@ -7,7 +7,29 @@ from app.src.services.sync_job_scheduler_service import SyncJobSchedulerService
 
 class Job:
     def __init__(self):
-        self.id = "test_id"
+        self.job_id = "job_id_1"
+        self.job_name = "job_name_1"
+        self.connector_type = "connector_type_1"
+        self.schedule = "schedule_1"
+        self.connector_config = "connector_config_1"
+        self.status = "status_1"
+        self.created_at = None
+        self.updated_at = None
+
+    def __json__(self):
+        return {
+            "job_id": self.job_id,
+            "job_name": self.job_name,
+            "connector_type": self.connector_type,
+            "schedule": self.schedule,
+            "connector_config": self.connector_config,
+            "job_status": self.status,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+        }
+
+
+# class Job
 
 
 @pytest.fixture
@@ -74,23 +96,25 @@ def test_schedule_sync_job_scheduler_error(
 
 @patch("app.src.services.sync_job_scheduler_service.Job")
 def test_get_all_jobs(mock_job_class, sync_job_scheduler_service):
-    mock_job_1 = MagicMock()
-    mock_job_1.job_id = "job_id_1"
-    mock_job_1.job_name = "job_name_1"
-    mock_job_1.connector_type = "connector_type_1"
-    mock_job_1.schedule = "schedule_1"
-    mock_job_1.connector_config = "connector_config_1"
+    job1 = Job()
+    job1.job_id = "job_id_1"
+    job1.job_name = "job_name_1"
+    job1.connector_type = "connector_type_1"
+    job1.schedule = "schedule_1"
+    job1.connector_config = "connector_config_1"
+    job1.status = "status_1"
 
-    mock_job_2 = MagicMock()
-    mock_job_2.job_id = "job_id_2"
-    mock_job_2.job_name = "job_name_2"
-    mock_job_2.connector_type = "connector_type_2"
-    mock_job_2.schedule = "schedule_2"
-    mock_job_2.connector_config = "connector_config_2"
+    job2 = Job()
+    job2.job_id = "job_id_2"
+    job2.job_name = "job_name_2"
+    job2.connector_type = "connector_type_2"
+    job2.schedule = "schedule_2"
+    job2.connector_config = "connector_config_2"
+    job2.status = "status_2"
 
     mock_job_class.query.all.return_value = [
-        mock_job_1,
-        mock_job_2,
+        job1,
+        job2,
     ]
 
     jobs = sync_job_scheduler_service.get_all_jobs()
@@ -102,6 +126,9 @@ def test_get_all_jobs(mock_job_class, sync_job_scheduler_service):
         "connector_type": "connector_type_1",
         "schedule": "schedule_1",
         "connector_config": "connector_config_1",
+        "created_at": None,
+        "updated_at": None,
+        "job_status": "status_1",
     }
     assert jobs[1] == {
         "job_id": "job_id_2",
@@ -109,6 +136,9 @@ def test_get_all_jobs(mock_job_class, sync_job_scheduler_service):
         "connector_type": "connector_type_2",
         "schedule": "schedule_2",
         "connector_config": "connector_config_2",
+        "created_at": None,
+        "updated_at": None,
+        "job_status": "status_2",
     }
 
 

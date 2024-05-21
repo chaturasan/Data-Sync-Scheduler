@@ -54,6 +54,22 @@ def test_failure_scenario_invalid_job_id(client):
     assert json.loads(response.data) == {"error": "job_id must be a valid UUID string"}
 
 
+def test_failure_scenario_invalid_limit(client):
+    job_id = str(uuid.uuid4())
+    response = client.get(f"{Constants.JOBS_API}/{job_id}/objects?limit=-1")
+
+    assert response.status_code == 400
+    assert json.loads(response.data) == {"error": "Invalid limit or offset"}
+
+
+def test_failure_scenario_invalid_offset(client):
+    job_id = str(uuid.uuid4())
+    response = client.get(f"{Constants.JOBS_API}/{job_id}/objects?offset=-10")
+
+    assert response.status_code == 400
+    assert json.loads(response.data) == {"error": "Invalid limit or offset"}
+
+
 def test_failure_scenario_internal_server_error(client, mock_service):
     mock_service.get_objects.side_effect = Exception("An error occurred")
 

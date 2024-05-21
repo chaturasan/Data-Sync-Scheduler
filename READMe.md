@@ -21,7 +21,7 @@ This project is a Data Sync Scheduler application built using the Flask framewor
 3. Set up the environment variables:
     - create .env file in the root folder and add below variables
         ```
-        DB_URL="sqlite:///sync_jobs.db"
+        DB_URL="sqlite:///sync_jobs.db" // SQlite db setup
         JSON_ROOT_FOLDER = "./json"
         DOWNLOAD_ROOT_FOLDER = "./download"
         DB_ROWS_RETRIEVAL_LIMIT = 1000

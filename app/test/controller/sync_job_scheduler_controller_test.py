@@ -79,6 +79,30 @@ def test_schedule_sync_job_internal_error(mock_validate_request, client, mock_se
     assert "Internal Server Error" in json.loads(response.data)["message"]
 
 
+@mock.patch(
+    "app.src.controllers.sync_job_scheduler_controller.validate_scheduler_creation_api_request"
+)
+def test_schedule_sync_job_service_return_err(
+    mock_validate_request, client, mock_service
+):
+    msg = "DB update failed"
+    mock_service.schedule_sync_job.return_value = None, msg
+    mock_validate_request.return_value = True, None
+
+    response = client.post(
+        f"{Constants.SYNC_JOB_SCHEDULER_API}/create_job",
+        json={
+            "connector_type": "s3",
+            "job_name": "test_job",
+            "schedule": "daily",
+            "connector_config": {"bucket_name": "test_bucket"},
+        },
+    )
+
+    assert response.status_code == 500
+    assert json.loads(response.data) == {"message": msg}
+
+
 def test_list_jobs(client, mock_service):
     mock_service.get_all_jobs.return_value = [
         {"job_id": "job_id_1", "job_name": "Job 1"},
