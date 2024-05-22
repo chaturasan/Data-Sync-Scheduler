@@ -23,7 +23,7 @@ This project is a Data Sync Scheduler application built using the Flask framewor
     ```
 
 3. Set up the environment variables:
-    - create .env file in the root folder and add below variables
+    - create .env file in the root folder and add below variables. Note: make sure to clean the text and remove comments
         ```
         DB_URL="sqlite:///sync_jobs.db" // SQlite db setup.
         JSON_ROOT_FOLDER = "./json" // Chunk related information per sync run are stored in format of json in this folder. Multiple jsons can be generated, each json of size ~ 10MB
