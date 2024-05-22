@@ -66,9 +66,7 @@ def __get_objects_to_be_processed(
 
 def __get_object_keys_to_be_processed(object_keys, processed_objects):
     processed_object_keys = [
-        object.object_key
-        for object in processed_objects
-        if object.status == "PROCESSED"
+        object.object_key for object in processed_objects if object.status != "FAILED"
     ]
     failed_object_key_mapping = {
         object.object_key: object

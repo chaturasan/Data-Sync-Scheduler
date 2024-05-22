@@ -25,9 +25,9 @@ This project is a Data Sync Scheduler application built using the Flask framewor
 3. Set up the environment variables:
     - create .env file in the root folder and add below variables
         ```
-        DB_URL="sqlite:///sync_jobs.db" // SQlite db setup
-        JSON_ROOT_FOLDER = "./json" // Every sync run generates a dump of json files containing chunk related information
-        DOWNLOAD_ROOT_FOLDER = "./download" // Stores the downloaded objects locally
+        DB_URL="sqlite:///sync_jobs.db" // SQlite db setup.
+        JSON_ROOT_FOLDER = "./json" // Chunk related information per sync run are stored in format of json in this folder. Multiple jsons can be generated, each json of size ~ 10MB
+        DOWNLOAD_ROOT_FOLDER = "./download" // Folder for the storing the downloaded objects locally.
         DB_ROWS_RETRIEVAL_LIMIT = 1000
         RETRY_COUNT = 3
         RETRY_DELAY = 1
@@ -210,12 +210,11 @@ Once the application is running, you can use the following endpoints to manage s
   docker run -d --name data-sync-container --env-file .env -p 5000:5000 data-sync-scheduler
   ```
 
-After above steps the webserver should be ready to receive requests.
+After above steps the container should be ready to receive requests.
 - To start an interactive bash shell inside the container to view the downloaded objects. We can use below command
   ```
   docker exec -it data-sync-container /bin/bash
   ```
-
 
     
 ## Next Steps
